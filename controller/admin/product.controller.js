@@ -39,7 +39,19 @@ module.exports.index = async (req, res) => {
         countProducts
     )
 
-    const products = await Product.find(find).sort({ position: "desc" }).limit(objectPagination.limitItems).skip(objectPagination.skip);
+    // sort
+    const sorts = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        sorts[req.query.sortKey] = req.query.sortValue;
+    } else {
+        sorts.position = "desc"
+    }
+    // end sort
+
+    const products = await Product.find(find)
+        .sort(sorts)
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip);
     // tìm giới hạn bao nhiêu sản phẩm và bỏ qua bao nhiết bắt đầu từ đầu
     res.render("admin/pages/products/index.pug", {
         pageTitle: "Trang san pham",

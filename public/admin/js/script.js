@@ -159,3 +159,44 @@ if (uploadImage) {
     })
 }
 // end upload preview
+
+// sort
+const sort=document.querySelector("[sort]");
+if(sort){
+    const sortSelect = sort.querySelector("[sort-select]");
+    const sortClear = sort.querySelector("[sort-clear]");
+
+    const url=new URL(window.location.href);
+
+
+    //sort
+    sortSelect.addEventListener("change",(e)=>{
+        const value=e.target.value;
+        
+        const [sortKey,sortValue]=value.split("-");
+        url.searchParams.set("sortKey",sortKey);
+        url.searchParams.set("sortValue",sortValue);
+
+        window.location.href=url.href;
+    })
+    //end sort
+
+    // clear
+    sortClear.addEventListener("click",()=>{
+        url.searchParams.delete("sortKey");
+        url.searchParams.delete("sortValue");
+
+        window.location.href=url.href;
+    })
+    // end clear
+
+    // thêm selected cho option
+    const sortKey=url.searchParams.get("sortKey");
+    const sortValue=url.searchParams.get("sortValue");
+
+    if( sortKey&& sortValue){
+        const optionSelected=sortSelect.querySelector(`option[value=${sortKey}-${sortValue}]`);
+        optionSelected.selected=true;
+    }
+}
+// end sort
