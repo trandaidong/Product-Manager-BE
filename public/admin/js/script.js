@@ -1,4 +1,4 @@
-//button status
+// sbuttonstatus
 const buttonStatus = document.querySelectorAll("[button-status]");// Nếu là thuộc tính tự viét => thêm [] lúc truy vấn
 if (buttonStatus.length > 0) {
     let url = new URL(window.location.href); // sử dụng new URL ta có thể sử dụng các hàm như set, remove
@@ -150,53 +150,53 @@ const uploadImage = document.querySelector("[upload-image]");
 if (uploadImage) {
     const uploadPreviewInput = uploadImage.querySelector("[upload-image-input]");
     const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
-    uploadPreviewInput.addEventListener("change",(e)=>{ // e.target luôn luôn là cái ô input
-       
-        const file=e.target.files[0];
-        if(file){
-            uploadImagePreview.src=URL.createObjectURL(file);// tạo đường dẫn ảnh tạm
+    uploadPreviewInput.addEventListener("change", (e) => { // e.target luôn luôn là cái ô input
+
+        const file = e.target.files[0];
+        if (file) {
+            uploadImagePreview.src = URL.createObjectURL(file);// tạo đường dẫn ảnh tạm
         }
     })
 }
 // end upload preview
 
 // sort
-const sort=document.querySelector("[sort]");
-if(sort){
+const sort = document.querySelector("[sort]");
+if (sort) {
     const sortSelect = sort.querySelector("[sort-select]");
     const sortClear = sort.querySelector("[sort-clear]");
 
-    const url=new URL(window.location.href);
+    const url = new URL(window.location.href);
 
 
     //sort
-    sortSelect.addEventListener("change",(e)=>{
-        const value=e.target.value;
-        
-        const [sortKey,sortValue]=value.split("-");
-        url.searchParams.set("sortKey",sortKey);
-        url.searchParams.set("sortValue",sortValue);
+    sortSelect.addEventListener("change", (e) => {
+        const value = e.target.value;
 
-        window.location.href=url.href;
+        const [sortKey, sortValue] = value.split("-");
+        url.searchParams.set("sortKey", sortKey);
+        url.searchParams.set("sortValue", sortValue);
+
+        window.location.href = url.href;
     })
     //end sort
 
     // clear
-    sortClear.addEventListener("click",()=>{
+    sortClear.addEventListener("click", () => {
         url.searchParams.delete("sortKey");
         url.searchParams.delete("sortValue");
 
-        window.location.href=url.href;
+        window.location.href = url.href;
     })
     // end clear
 
     // thêm selected cho option
-    const sortKey=url.searchParams.get("sortKey");
-    const sortValue=url.searchParams.get("sortValue");
+    const sortKey = url.searchParams.get("sortKey");
+    const sortValue = url.searchParams.get("sortValue");
 
-    if( sortKey&& sortValue){
-        const optionSelected=sortSelect.querySelector(`option[value=${sortKey}-${sortValue}]`);
-        optionSelected.selected=true;
+    if (sortKey && sortValue) {
+        const optionSelected = sortSelect.querySelector(`option[value=${sortKey}-${sortValue}]`);
+        optionSelected.selected = true;
     }
 }
 // end sort

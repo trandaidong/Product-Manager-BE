@@ -1,4 +1,5 @@
 const express = require('express')// giống include thư viện trong c++
+var path = require('path'); // có sẫn trong expressJS
 const routerClient = require('./routers/client/index.router.js');
 const routerAdmin = require('./routers/admin/index.router.js');
 const database = require('./config/database.js')
@@ -41,6 +42,9 @@ app.locals.prefixAdmin=systemConfig.prefixAdmin;
 
 app.use(express.static(`${__dirname}/public`));
 //app.use(express.static(`public`));
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
+
 routerClient(app);
 routerAdmin(app);
 
