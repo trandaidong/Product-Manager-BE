@@ -29,8 +29,6 @@ app.use(bodyParser.urlencoded({ extended: false }))// encode chuyển đổi res
 app.set('views', `${__dirname}/views`);
 app.set("view engine", 'pug');
 
-
-
 // Flash
 app.use(cookieParser('123456789_ABC'));
 app.use(session({ cookie: { maxAge: 60000 }}));
