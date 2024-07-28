@@ -5,6 +5,10 @@ mongoose.plugin(slug);// để tự động chuyển tên sản phẩm thành sl
 
 const productSchema = new mongoose.Schema({
     title: String,
+    parent_category_id:{
+        type: String,
+        default: ""
+    },
     description: String,
     price: Number,
     discountPercentage: Number,

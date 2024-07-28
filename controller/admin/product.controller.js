@@ -4,6 +4,10 @@ const searchHelper = require("../../helper/search.js");
 const paginationHelper = require("../../helper/pagination.js");
 const systemConfig = require("../../config/system.js")
 
+const ProductCategory = require("../../models/product-category.model.js");
+const tableTreeHelper=require("../../helper/createTree.js")
+
+
 //[GET] /admin/products
 module.exports.index = async (req, res) => {
 
@@ -112,8 +116,14 @@ module.exports.deleteItem = async (req, res) => {
 }
 //  [GET] /admin/products/create
 module.exports.create = async (req, res) => {
+
+    const records = await ProductCategory.find({ deleted: false});
+    
+    const newRecords = tableTreeHelper.tree(records);
+
     res.render("admin/pages/products/create.pug", {
         pageTitle: "Trang san pham",
+        records: newRecords
     })
 }
 //  [POST] /admin/products/create
@@ -147,9 +157,14 @@ module.exports.updatePost = async (req, res) => {
         }
         const product = await Product.findOne(find);
 
+        const records = await ProductCategory.find({ deleted: false});
+    
+        const newRecords = tableTreeHelper.tree(records);
+
         res.render(`admin/pages/products/update.pug`, {
             pageTitle: "Sửa đổi sản phẩm",
-            product: product
+            product: product,
+            records: newRecords
         });
     }
     catch (err) {

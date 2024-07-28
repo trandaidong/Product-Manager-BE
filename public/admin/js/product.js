@@ -26,6 +26,7 @@ if (buttonChangeStatus) {
 // delete item
 
 const buttonDeleteItem = document.querySelectorAll("[button-delete-item]");
+console.log(buttonDeleteItem)
 if (buttonDeleteItem.length) {
     const formDeleteItem = document.querySelector("#form-delete-item");
     const path = formDeleteItem.getAttribute("data-path");

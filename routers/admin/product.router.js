@@ -30,7 +30,12 @@ router.post(
     controller.createPost)
 
 router.get('/update/:id', controller.updatePost);
-router.patch('/update/:id', upload.single('thumbnail'), uploadClound.upload,validate.createPost, controller.updatePostPatch);
+
+router.patch('/update/:id', 
+    upload.single('thumbnail'), 
+    uploadClound.upload,
+    validate.createPost, 
+    controller.updatePostPatch);
 
 router.get('/detail/:id', controller.detail);
 module.exports = router;

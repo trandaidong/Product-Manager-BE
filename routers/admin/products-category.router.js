@@ -20,5 +20,17 @@ router.post(
     validate.createCategory,// middlewere: có thể thêm được nhiều middlewere có chức năng check validate và chuyển qua hàm tiếp theo 
     controller.createCategory)
 
+router.get('/update/:id', controller.update);
+
+router.patch(
+    '/update/:id',
+    upload.single('thumbnail'),
+    uploadClound.upload,
+    validate.createCategory,// middlewere: có thể thêm được nhiều middlewere có chức năng check validate và chuyển qua hàm tiếp theo 
+    controller.updateCategory)
+
+router.get('/detail/:id', controller.detail);
+
+router.delete('/delete/:id', controller.deleteItem);
 
 module.exports = router;
