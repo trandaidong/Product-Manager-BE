@@ -14,4 +14,8 @@ router.get('/update/:id', controller.update);
 
 router.patch('/update/:id', controller.updatePost);
 
+router.get('/permission', controller.permission);
+
+router.patch('/permission', controller.permissionPost);
+
 module.exports = router;
