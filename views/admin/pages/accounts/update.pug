@@ -1,0 +1,105 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    h1(class="mb-4") Sửa tài khoản
+
+    +alert-error(3000)
+    +alert-success(3000)
+
+    if(roles.length > 0)
+        form(
+            action=`${prefixAdmin}/accounts/update/${record.id}?_method=PATCH`
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(class="form-group")
+                lable(for="fullname") Họ tên *
+                input(
+                    type="text"
+                    class="form-control"
+                    id="fullname"
+                    name="fullname"
+                    required
+                    value=record.fullname
+                )
+            div(class="form-group")
+                lable(for="email") Email *
+                input(
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                    value=record.email
+                )
+
+            div(class="form-group")
+                lable(for="password") Mật khẩu *
+                input(
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                )
+            
+            div(class="form-group")
+                lable(for="phone") Số điện thoại
+                input(
+                    type="text"
+                    class="form-control"
+                    id="phone"
+                    name="phone"
+                    value=record.phone
+                )
+            div(class="form-group"
+                upload-image
+            )
+                lable(for="avatar") Avatar
+                input(
+                    type="file"
+                    class="form-control-file"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/*"
+                    upload-image-input
+                )
+                img(src=record.avatar
+                    class="image-review"
+                    upload-image-revieww
+                )
+            div(class="form-group")
+                lable(for="role_id") Phân quyền 
+                select(name="role_id" id ="role_id" class="form-control")
+                    option(disabled) -- Chọn --
+                    each item in roles 
+                        option(value=item.id) #{item.title} 
+                    
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked =(record.status=="active"? true:false)
+                )
+                label(for="statusActive" class="form-check-label") Hoạt động
+            
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusInactive"
+                    name="status"
+                    value="inactive"
+                    checked =(record.status=="inactive"? true:false)
+                )
+                label(for="statusActive" class="form-check-label") Dừng hoạt động
+            div(class="form-group")
+                button(type="submit" class="btn btn-primary") Cập nhật
+    else 
+        p Vui lòng tạo nhóm quyền trước khi cập nhât tài khoản 
+        p   
+            a(href=`${prefixAdmin}/roles/create` class="btn btn-seccondary") Tạo nhóm quyền

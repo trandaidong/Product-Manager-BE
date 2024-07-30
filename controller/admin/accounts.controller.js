@@ -11,11 +11,11 @@ module.exports.index = async (req, res) => {
     }
     const Records = await Account.find(find).select("-password -token"); // chọn những collection loại bỏ thuộc tính password and token
     for (const item of Records) {
-        const role=await Role.findOne({
+        const role = await Role.findOne({
             _id: item.role_id,
             deleted: false
         });
-        item.role=role;
+        item.role = role;
     }
     res.render("admin/pages/accounts/index.pug", {
         pageTitle: "Trang tài khoản",
@@ -23,7 +23,7 @@ module.exports.index = async (req, res) => {
     })
 }
 
-//[GET] /admin/accounts
+//[GET] /admin/accounts/créate
 module.exports.create = async (req, res) => {
     const roles = await Role.find({ deleted: false });
     res.render("admin/pages/accounts/create.pug", {
@@ -31,13 +31,50 @@ module.exports.create = async (req, res) => {
         records: roles
     })
 }
-//[POST] /admin/accounts
+//[POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
     const emailExists = await Account.findOne({
         email: req.body.email,
         deleted: false
     });
-    if (emailExists) {
+    if (emailExists) { // nếu email đã tồn tại 
+        req.flash("error", `Email ${req.body.email} exists!`);
+        res.redirect("back");
+    }
+    else {
+        req.body.password = md5(req.body.password);
+        const account = new Account(req.body);
+
+        await account.save();
+        req.flash("success", `Create successfully!`);
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+}
+//[GET] /admin/accounts/update
+module.exports.update = async (req, res) => {
+    try {
+        const record = await Account.findOne({ _id: req.params.id, deleted: false });
+        console.log(record)
+        const roles = await Role.find({ deleted: false });
+        res.render("admin/pages/accounts/update.pug", {
+            pageTitle: "Sửa tài khoản",
+            record: record,
+            roles: roles
+        })
+    }
+    catch(error){
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+
+}
+
+//[PATCH] /admin/accounts/update
+module.exports.updatePost = async (req, res) => {
+    const emailExists = await Account.findOne({
+        email: req.body.email,
+        deleted: false
+    });
+    if (emailExists) { // nếu email đã tồn tại 
         req.flash("error", `Email ${req.body.email} exists!`);
         res.redirect("back");
     }
