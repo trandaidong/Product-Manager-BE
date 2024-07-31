@@ -41,7 +41,6 @@ block main
                     class="form-control"
                     id="password"
                     name="password"
-                    required
                 )
             
             div(class="form-group")
@@ -66,15 +65,18 @@ block main
                     upload-image-input
                 )
                 img(src=record.avatar
-                    class="image-review"
-                    upload-image-revieww
+                    class="image-preview"
+                    upload-image-preview
                 )
             div(class="form-group")
                 lable(for="role_id") Phân quyền 
                 select(name="role_id" id ="role_id" class="form-control")
                     option(disabled) -- Chọn --
                     each item in roles 
-                        option(value=item.id) #{item.title} 
+                        option(
+                            value=item.id 
+                            selected=(item.id === record.role_id ? true : false) 
+                        ) #{item.title} 
                     
             div(class="form-group form-check form-check-inline")
                 input(

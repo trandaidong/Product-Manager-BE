@@ -4,6 +4,7 @@ const productRouters = require('./product.router.js');
 const productCategoryRouter = require('./products-category.router.js');
 const rolesRouter = require('../../routers/admin/roles.router.js');
 const accountsRouter = require('../../routers/admin/accounts.router.js');
+const authRouter = require('../../routers/admin/auth.router.js');
 
 module.exports = (app) => {
     const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -16,4 +17,6 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + '/roles', rolesRouter);
 
     app.use(PATH_ADMIN + '/accounts', accountsRouter);
+
+    app.use(PATH_ADMIN + "/auth", authRouter);
 }

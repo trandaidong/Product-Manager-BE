@@ -54,7 +54,7 @@ module.exports.createPost = async (req, res) => {
 module.exports.update = async (req, res) => {
     try {
         const record = await Account.findOne({ _id: req.params.id, deleted: false });
-        console.log(record)
+        //console.log(record)
         const roles = await Role.find({ deleted: false });
         res.render("admin/pages/accounts/update.pug", {
             pageTitle: "Sửa tài khoản",
@@ -62,7 +62,7 @@ module.exports.update = async (req, res) => {
             roles: roles
         })
     }
-    catch(error){
+    catch (error) {
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 
@@ -71,6 +71,7 @@ module.exports.update = async (req, res) => {
 //[PATCH] /admin/accounts/update
 module.exports.updatePost = async (req, res) => {
     const emailExists = await Account.findOne({
+        _id: { $ne: req.params.id },
         email: req.body.email,
         deleted: false
     });
@@ -79,11 +80,19 @@ module.exports.updatePost = async (req, res) => {
         res.redirect("back");
     }
     else {
-        req.body.password = md5(req.body.password);
-        const account = new Account(req.body);
-
-        await account.save();
-        req.flash("success", `Create successfully!`);
-        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+        if (req.body.password) {
+            req.body.password = md5(req.body.password);
+        }
+        else {
+            delete req.body.password
+        }
+        try {
+            await Account.updateOne({ _id: req.params.id }, req.body);
+            req.flash("success", `Update successfully!`);
+        }
+        catch {
+            req.flash("error", `Update faild!`);
+        }
+        res.redirect("back");
     }
 }   

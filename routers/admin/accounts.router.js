@@ -21,11 +21,11 @@ router.post('/create',
 
 router.get('/update/:id', controller.update);
 
-// router.patch('update/:id',
-//     upload.single("avatar"),
-//     uploadClound.upload,
-//     //validate.updatePost, 
-//     controller.updatePost
-// )
+router.patch('/update/:id',
+    upload.single("avatar"),
+    uploadClound.upload,
+    validate.updatePost, 
+    controller.updatePost
+);
 
 module.exports = router;
