@@ -22,38 +22,56 @@ mixin table-tree(items,level=1)
                     name="position"
                 )
             td 
-                if(item.status=="active")
-                    a(
-                        href="javascript:;" 
-                        class="badge badge-success"
-                        data-id= item.id 
-                        data-status=item.status
-                        button-change-status
-                    ) Hoạt động
-                else
-                    // javascript:; ở đây có nghĩa là hoạt động ở đây được làm bởi javascript
-                    // hiểu như là nó để cho xử lí ở js chứ không tự động link qua router khác
-                    // nêu skhong thì có thể thay thành thẻ button cũng được
-                    a(
-                        href="javascript:;" 
-                        class="badge badge-danger"
-                        data-status=item.status 
-                        data-id=item.id 
-                        button-change-status
-                    ) Dừng hoạt động
+                if(role.permissions.includes("products-category_update"))
+                    if(item.status=="active")
+                        a(
+                            href="javascript:;" 
+                            class="badge badge-success"
+                            data-id= item.id 
+                            data-status=item.status
+                            button-change-status
+                        ) Hoạt động
+                    else
+                        // javascript:; ở đây có nghĩa là hoạt động ở đây được làm bởi javascript
+                        // hiểu như là nó để cho xử lí ở js chứ không tự động link qua router khác
+                        // nêu skhong thì có thể thay thành thẻ button cũng được
+                        a(
+                            href="javascript:;" 
+                            class="badge badge-danger"
+                            data-status=item.status 
+                            data-id=item.id 
+                            button-change-status
+                        ) Dừng hoạt động  
+                else 
+                    if(item.status=="active")
+                        span(
+                            class="badge badge-success"
+                            data-id= item.id 
+                            data-status=item.status
+                            button-change-status
+                        ) Hoạt động
+                    else
+                        span(
+                            class="badge badge-danger"
+                            data-status=item.status 
+                            data-id=item.id 
+                            button-change-status
+                        ) Dừng hoạt động  
+
             td 
                 a(
                     href=`${prefixAdmin}/products-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                 ) Chi tiết
 
-                a(
-                    href=`${prefixAdmin}/products-category/update/${item.id}`
-                    class="btn btn-warning btn-sm") Sửa
-                    
-                button(class="btn btn-danger btn-sm ml-l"
-                    button-delete-item
-                    button-id=item.id
-                ) Xóa
+                if(role.permissions.includes("products-category_update"))
+                    a(
+                        href=`${prefixAdmin}/products-category/update/${item.id}`
+                        class="btn btn-warning btn-sm") Sửa
+                if(role.permissions.includes("products-category_delete"))
+                    button(class="btn btn-danger btn-sm ml-l"
+                        button-delete-item
+                        button-id=item.id
+                    ) Xóa
         if(item.children && item.children.length>0)
             +table-tree(item.children,level+1)

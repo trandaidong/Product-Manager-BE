@@ -1,11 +1,12 @@
 const Product = require("../../models/product.model.js");
+const Account = require("../../models/account.model.js");
 const filterStatusHelper = require("../../helper/filterStatus.js");
 const searchHelper = require("../../helper/search.js");
 const paginationHelper = require("../../helper/pagination.js");
 const systemConfig = require("../../config/system.js")
 
 const ProductCategory = require("../../models/product-category.model.js");
-const tableTreeHelper=require("../../helper/createTree.js")
+const tableTreeHelper = require("../../helper/createTree.js")
 
 
 //[GET] /admin/products
@@ -57,6 +58,15 @@ module.exports.index = async (req, res) => {
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
     // tìm giới hạn bao nhiêu sản phẩm và bỏ qua bao nhiết bắt đầu từ đầu
+
+    // thêm tên tài khoản đã tạo sản phẩm
+    for (const product of products) {
+        const user = await Account.findOne({ _id: product.createdBy.account_id });
+        if (user) {
+            product.accountFullname = user.fullname;
+        }
+    }
+    
     res.render("admin/pages/products/index.pug", {
         pageTitle: "Trang san pham",
         products: products,
@@ -117,8 +127,8 @@ module.exports.deleteItem = async (req, res) => {
 //  [GET] /admin/products/create
 module.exports.create = async (req, res) => {
 
-    const records = await ProductCategory.find({ deleted: false});
-    
+    const records = await ProductCategory.find({ deleted: false });
+
     const newRecords = tableTreeHelper.tree(records);
 
     res.render("admin/pages/products/create.pug", {
@@ -143,6 +153,11 @@ module.exports.createPost = async (req, res) => {
     //     req.body.thumbnail = `/uploads/${req.file.filename}`; // gán thumbnail của file cho body còn tên file đã được xử lí ở upload(router)
     // }
     // ceate new product
+
+    req.body.createdBy = {
+        account_id: res.locals.user.id
+    }
+
     const product = new Product(req.body);
     // save into database
     await product.save()
@@ -157,8 +172,8 @@ module.exports.updatePost = async (req, res) => {
         }
         const product = await Product.findOne(find);
 
-        const records = await ProductCategory.find({ deleted: false});
-    
+        const records = await ProductCategory.find({ deleted: false });
+
         const newRecords = tableTreeHelper.tree(records);
 
         res.render(`admin/pages/products/update.pug`, {

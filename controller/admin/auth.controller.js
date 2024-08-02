@@ -6,9 +6,14 @@ const Roles = require("../../models/roles.model.js");
 
 //[GET] /admin/auth/login
 module.exports.login = (req, res) => {
-    res.render("admin/pages/auth/login.pug", {
-        pageTitle: "Đăng nhập"
-    })
+    if (req.cookies.token) {
+        res.redirect(`${systemConfig.prefixAdmin}/dashboard`)
+    }
+    else {
+        res.render("admin/pages/auth/login.pug", {
+            pageTitle: "Đăng nhập"
+        })
+    }
 }
 //[POST] /admin/auth/login
 module.exports.loginPost = async (req, res) => {
@@ -33,7 +38,7 @@ module.exports.loginPost = async (req, res) => {
         res.redirect('back');
         return;
     }
-    res.cookie('token',user.token);
+    res.cookie('token', user.token);
     res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 }
 
