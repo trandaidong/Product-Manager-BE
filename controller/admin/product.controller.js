@@ -66,7 +66,7 @@ module.exports.index = async (req, res) => {
             product.accountFullname = user.fullname;
         }
     }
-    
+
     res.render("admin/pages/products/index.pug", {
         pageTitle: "Trang san pham",
         products: products,
@@ -100,7 +100,14 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", `Update successfully ${ids.length} products`)
             break;
         case "delete-all":
-            await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() });
+            await Product.updateMany(
+                { _id: { $in: ids } }, 
+                { 
+                    deleted: true,
+                    deletedBy: {
+                        account_id:res.locals.user.id,
+                        deleteAt: new Date()
+                    }  });
             req.flash("success", `Delete successfully ${ids.length} products`)
             break;
         case "change-position":
@@ -120,7 +127,16 @@ module.exports.changeMulti = async (req, res) => {
 //  [DELETE] /admin/products/delete
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
-    await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() });// new Date để lấy time hiện tại
+    await Product.updateOne(
+        { _id: id }, 
+        { 
+            deleted: true, 
+            deletedBy: {
+                account_id:res.locals.user.id,
+                deleteAt: new Date()
+            } 
+    });// new Date để lấy time hiện tại
+
     req.flash("success", `Delete successfully`)
     res.redirect("back");
 }

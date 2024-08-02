@@ -3,8 +3,8 @@ var path = require('path'); // có sẫn trong expressJS
 const routerClient = require('./routers/client/index.router.js');
 const routerAdmin = require('./routers/admin/index.router.js');
 const database = require('./config/database.js')
-const systemConfig =require('./config/system.js')
-
+const systemConfig = require('./config/system.js')
+const moment = require('moment'); // thư viện chuyển đổi time timestamp-> time
 const methodOverride = require('method-override')// thư viện ghi đè method các phương thức PATH..
 const bodyParser = require('body-parser')// thư viện chuyển đổi data trong req.body có thể usable
 
@@ -31,13 +31,13 @@ app.set("view engine", 'pug');
 
 // Flash
 app.use(cookieParser('123456789_ABC'));
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 // End flash
 
 // tạo biến prefĩAdmin có thể gọi ở tất cả các file pug của chương trình
-app.locals.prefixAdmin=systemConfig.prefixAdmin; 
-
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 app.use(express.static(`${__dirname}/public`));
 //app.use(express.static(`public`));
 app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));

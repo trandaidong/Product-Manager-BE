@@ -5,7 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
-
+include ../../mixins/moment.pug
 block main 
     if(role.permissions.includes("products_view"))
         h1 Trang danh sách sản phẩm
@@ -121,7 +121,7 @@ block main
                                                 ) Dừng hoạt động
                                     td 
                                         p #{item.accountFullname}
-                                         p #{item.accountFullname}
+                                        +formatDateTime(item.createdBy.createAt)
                                     td 
                                         a(
                                             href=`${prefixAdmin}/products/detail/${item.id}`

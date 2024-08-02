@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     createdBy:{
         account_id: String,
         createAt:{
-            type: String,
+            type: Date,
             default: Date.now
         }
     },
@@ -31,6 +31,10 @@ const productSchema = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
+    },
+    deletedBy:{
+        account_id: String,
+        deleteAt: Date
     },
     deletedAt: Date
 },{ // object thứ 2 này chứa thời gian tạo mới sản phẩm => tạo ra 2 trường createAt, updateAt trong database
