@@ -5,7 +5,7 @@ mongoose.plugin(slug);// để tự động chuyển tên sản phẩm thành sl
 
 const productSchema = new mongoose.Schema({
     title: String,
-    parent_category_id:{
+    parent_category_id: {
         type: String,
         default: ""
     },
@@ -13,31 +13,39 @@ const productSchema = new mongoose.Schema({
     price: Number,
     discountPercentage: Number,
     stock: Number,
-    slug: { 
-        type: String, 
+    slug: {
+        type: String,
         slug: "title",
         unique: true
     },
-    createdBy:{
+    createdBy: {
         account_id: String,
-        createAt:{
+        createAt: {
             type: Date,
             default: Date.now
         }
     },
     thumbnail: String,
     status: String,
+    featured: String,
     position: Number,
     deleted: {
         type: Boolean,
         default: false
     },
-    deletedBy:{
+    deletedBy: {
         account_id: String,
         deleteAt: Date
     },
+    updatedBy: [
+        {
+            account_id: String,
+            updateAt: Date
+        }
+    ],
+
     deletedAt: Date
-},{ // object thứ 2 này chứa thời gian tạo mới sản phẩm => tạo ra 2 trường createAt, updateAt trong database
+}, { // object thứ 2 này chứa thời gian tạo mới sản phẩm => tạo ra 2 trường createAt, updateAt trong database
     timestamps: true
 })
 const Product = mongoose.model("Product", productSchema, 'products');// tham số thứ 3 giống nhưu là tên bảng trong database để nó có thể tìm tới

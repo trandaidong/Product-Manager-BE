@@ -1,0 +1,72 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    //if(role.permissions.includes("accounts_update"))
+    h1(class="mb-4") Cập nhật thông tin cá nhân
+
+    +alert-error(3000)
+    +alert-success(3000)
+
+    form(
+        action=`${prefixAdmin}/my-account/update?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="form-group")
+            lable(for="fullname") Họ tên *
+            input(
+                type="text"
+                class="form-control"
+                id="fullname"
+                name="fullname"
+                required
+                value=user.fullname
+            )
+        div(class="form-group")
+            lable(for="email") Email *
+            input(
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                required
+                value=user.email
+            )
+
+        div(class="form-group")
+            lable(for="password") Mật khẩu *
+            input(
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+            )
+        
+        div(class="form-group")
+            lable(for="phone") Số điện thoại
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value=user.phone
+            )
+        div(class="form-group"
+            upload-image
+        )
+            lable(for="avatar") Avatar
+            input(
+                type="file"
+                class="form-control-file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                upload-image-input
+            )
+            img(src=user.avatar
+                class="image-preview"
+                upload-image-preview
+            )
+        div(class="form-group")
+            button(type="submit" class="btn btn-primary") Cập nhật

@@ -6,6 +6,7 @@ const rolesRouter = require('../../routers/admin/roles.router.js');
 const accountsRouter = require('../../routers/admin/accounts.router.js');
 const authRouter = require('../../routers/admin/auth.router.js');
 const authMiddleware = require('../../middlewares/admin/auth.middleware.js');
+const mAccountRouter = require('../../routers/admin/my-account.router.js');
 
 module.exports = (app) => {
     const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -20,4 +21,6 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + '/accounts', authMiddleware.requireAuth, accountsRouter);
 
     app.use(PATH_ADMIN + "/auth", authRouter);
+
+    app.use(PATH_ADMIN + '/my-account', authMiddleware.requireAuth, mAccountRouter)
 }

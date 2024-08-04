@@ -13,7 +13,10 @@ module.exports.requireAuth = async (req, res, next) => {
         }
         else {
             const role =await Role.findOne({ _id: user.role_id }).select("title permissions");
+
+            console.log("auth.middleware.js")
             console.log(role)
+            
             res.locals.user = user;
             res.locals.role = role;
             next();

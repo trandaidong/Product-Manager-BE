@@ -65,6 +65,13 @@ module.exports.index = async (req, res) => {
         if (user) {
             product.accountFullname = user.fullname;
         }
+
+        // Lấy ra thông tin người cập nhật gần nhất
+        const updatedBy = product.updatedBy.slice(-1)[0];// Lấy ra người cập nhật cuối cùng
+        if (updatedBy) {
+            var usertUpdated = await Account.findOne({ _id: updatedBy.account_id });
+            updatedBy.accountFullname = usertUpdated.fullname;
+        }
     }
 
     res.render("admin/pages/products/index.pug", {
@@ -77,7 +84,13 @@ module.exports.index = async (req, res) => {
 }
 //  [PATCH] /admin/products/change-status/active/123
 module.exports.changeStatus = async (req, res) => {
-    await Product.updateOne({ _id: req.params.id }, { status: req.params.status })
+
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updateAt: new Date()
+    }
+
+    await Product.updateOne({ _id: req.params.id }, { status: req.params.status, $push: { updatedBy: updatedBy } })
     // hàm này đối số gồm 2 object: đầu tiên là object để tìm đối tượng đó trong dữ liệu
     //: thứ 2 là đối tượng muốn update
     // params: chứa những router động
@@ -90,31 +103,37 @@ module.exports.changeMulti = async (req, res) => {
     const ids = req.body.ids.split(", ");
     const type = req.body.type;
 
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updateAt: new Date()
+    }
+
     switch (type) {
         case "active":
-            await Product.updateMany({ _id: { $in: ids } }, { status: type });
+            await Product.updateMany({ _id: { $in: ids } }, { status: type, $push: { updatedBy: updatedBy } });
             req.flash("success", `Update successfully ${ids.length} products`)
             break;
         case "inactive":
-            await Product.updateMany({ _id: { $in: ids } }, { status: type });
+            await Product.updateMany({ _id: { $in: ids } }, { status: type, $push: { updatedBy: updatedBy } });
             req.flash("success", `Update successfully ${ids.length} products`)
             break;
         case "delete-all":
             await Product.updateMany(
-                { _id: { $in: ids } }, 
-                { 
+                { _id: { $in: ids } },
+                {
                     deleted: true,
                     deletedBy: {
-                        account_id:res.locals.user.id,
+                        account_id: res.locals.user.id,
                         deleteAt: new Date()
-                    }  });
+                    }
+                });
             req.flash("success", `Delete successfully ${ids.length} products`)
             break;
         case "change-position":
             for (let item of ids) {
                 let [id, pos] = item.split("-");
                 pos = parseInt(pos);
-                await Product.updateOne({ _id: id }, { position: pos });
+                await Product.updateOne({ _id: id }, { position: pos, $push: { updatedBy: updatedBy } });
             }
             req.flash("success", `Update position successfully ${ids.length} products`)
             break;
@@ -128,14 +147,14 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
     await Product.updateOne(
-        { _id: id }, 
-        { 
-            deleted: true, 
+        { _id: id },
+        {
+            deleted: true,
             deletedBy: {
-                account_id:res.locals.user.id,
+                account_id: res.locals.user.id,
                 deleteAt: new Date()
-            } 
-    });// new Date để lấy time hiện tại
+            }
+        });// new Date để lấy time hiện tại
 
     req.flash("success", `Delete successfully`)
     res.redirect("back");
@@ -214,7 +233,17 @@ module.exports.updatePostPatch = async (req, res) => {
     }
     // save into database
     try {
-        await Product.updateOne({ _id: req.params.id }, req.body);
+
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updateAt: new Date()
+        }
+
+        await Product.updateOne({ _id: req.params.id }, {
+            ...req.body, // giải các thuộc tính của đối tượng ra
+            $push: { updatedBy: updatedBy } // phương thức push của js 
+        });
+
         req.flash("success", `Update successfully!`);
     }
     catch (error) {

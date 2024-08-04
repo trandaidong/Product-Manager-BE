@@ -2,7 +2,6 @@ const Account = require("../../models/account.model.js");
 const Role = require("../../models/roles.model.js");
 const systemConfig = require("../../config/system.js");
 var md5 = require('md5'); // thư viện mã hóa password
-const Roles = require("../../models/roles.model.js");
 
 //[GET] /admin/accounts
 module.exports.index = async (req, res) => {

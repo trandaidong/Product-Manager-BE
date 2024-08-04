@@ -4,13 +4,13 @@ const streamifier = require('streamifier');
 
 // cloundinary
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_KEY,
-    api_secret: process.env.CLOUD_SERCET, 
+    // cloud_name: process.env.CLOUD_NAME,
+    // api_key: process.env.CLOUD_KEY,
+    // api_secret: process.env.CLOUD_SERCET, 
 
-    // cloud_name: "dt2itjyld",
-    // api_key: "963242911373137",
-    // api_secret: "KTWqGpu4gXXY48-gB-da-sN4S1w"
+    cloud_name: "dt2itjyld",
+    api_key: "963242911373137",
+    api_secret: "KTWqGpu4gXXY48-gB-da-sN4S1w"
 });
 // end cloundinary
 
