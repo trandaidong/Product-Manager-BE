@@ -5,6 +5,7 @@ const systemConfig = require("../../config/system.js");
 //[GET] /search
 module.exports.index = async (req, res) => {
     const keyword=req.query.keyword;
+    let newProducts=[];
     if(keyword){
         const keywordRegex=new RegExp(keyword,"i");
         var products = await Product.find({
@@ -12,9 +13,9 @@ module.exports.index = async (req, res) => {
             status: "active",
             deleted: false
         });
+        newProducts = productsHelper.newPriceProducts(products);
     }
 
-    const newProducts = productsHelper.newPriceProducts(products);
     res.render('client/pages/search/index.pug', {
         pageTitle: "Kết quả tìm kiếm",
         keyword: keyword,
