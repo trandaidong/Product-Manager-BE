@@ -46,6 +46,13 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 routerClient(app);
 routerAdmin(app);
 
+// Tất cả những trường hợp khi người dùng truy cập mà không có router thì chạy vào đây
+app.get("*", (req, res) => {
+  res.render("client/pages/errors/404.pug", {
+    pageTitle: "404 NOT FOUND"
+  })
+})
+
 app.listen(port, () => { // lắng nghe port => chạy vô hàm
   console.log(`Example app listening on port ${port}`);
 })

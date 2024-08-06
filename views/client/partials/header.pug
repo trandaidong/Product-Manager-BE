@@ -6,7 +6,7 @@ header.header
             .col-3
                 .inner-logo
                     a(href="/")
-                        img(src="/images/logo.svg",alt="logo")
+                        img(src=settingGeneral.logo,alt="logo")
             .col-5 
                 form(
                     action="/search"
@@ -28,11 +28,29 @@ header.header
             .col-4
                 .inner-menu     
                     ul 
-                        li
-                            a(href="/") Trang chủ
-                        li(class="sub-menu")
-                            - const pathProduct="/products"
-                            a(href=pathProduct) Sản phẩm
-                                +sub-menu(layoutProductCategory,pathProduct)
-                        li
-                            a(href="/cart") Giỏ hàng (#{miniCart ? miniCart.totalQuantity: "0" })
+                        //- li
+                        //-     a(href="/") Trang chủ
+                        //- li(class="sub-menu")
+                        //-     - const pathProduct="/products"
+                        //-     a(href=pathProduct) Sản phẩm
+                        //-         +sub-menu(layoutProductCategory,pathProduct)
+                        //- li
+                        //-     a(href="/cart") Giỏ hàng (#{miniCart ? miniCart.totalQuantity: "0" })
+                        if(user)    
+                            li
+                                a(href="/") Trang chủ
+                            li(class="sub-menu")
+                                - const pathProduct="/products"
+                                a(href=pathProduct) Sản phẩm
+                                    +sub-menu(layoutProductCategory,pathProduct)
+                            li      
+                                a(href="/user/info") #{user.fullname}
+                            li
+                                a(href="/cart") Giỏ hàng (#{miniCart ? miniCart.totalQuantity: "0" })
+                            li  
+                                a(href="/user/logout") Đăng xuất
+                        else
+                            li   
+                                a(href="/user/register") Đăng ký
+                            li   
+                                a(href="/user/login") Đăng nhập
