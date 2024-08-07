@@ -29,6 +29,14 @@ app.use(bodyParser.urlencoded({ extended: false }))// encode chuyển đổi res
 app.set('views', `${__dirname}/views`);
 app.set("view engine", 'pug');
 
+// SocketIO
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+global._io = io;
+// End socketIO
+
 // Flash
 app.use(cookieParser('123456789_ABC'));
 app.use(session({ cookie: { maxAge: 60000 } }));
@@ -52,7 +60,7 @@ app.get("*", (req, res) => {
     pageTitle: "404 NOT FOUND"
   })
 })
-
-app.listen(port, () => { // lắng nghe port => chạy vô hàm
+// mix server vs app
+server.listen(port, () => { // lắng nghe port => chạy vô hàm
   console.log(`Example app listening on port ${port}`);
 })

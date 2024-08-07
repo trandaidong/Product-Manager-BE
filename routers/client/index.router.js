@@ -8,6 +8,8 @@ const chekcoutRouter = require("../../routers/client/checkout.router.js");
 const userRouter = require("../../routers/client/user.router.js");
 const userMiddleware=require("../../middlewares/client/user.middleware.js");
 const settingGeneralMiddleware=require("../../middlewares/client/setting.middelware.js");
+const chatRouter=require("../../routers/client/chat.router.js");
+const authMiddleware=require("../../middlewares/client/auth.middleware");
 
 // Bên js thì ta chỉ cần sài export nhưng giờ ta sẽ export hết ra các hàm này nên sài
 module.exports = (app) => {
@@ -30,5 +32,7 @@ module.exports = (app) => {
     app.use('/checkout', chekcoutRouter);
 
     app.use('/user', userRouter);
+
+    app.use('/chat',authMiddleware.requireAuth, chatRouter);
 }
 
