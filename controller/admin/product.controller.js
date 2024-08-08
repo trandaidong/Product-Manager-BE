@@ -184,10 +184,6 @@ module.exports.createPost = async (req, res) => {
     else {
         req.body.position = parseInt(req.body.position);
     }
-    // if (req.file) {
-    //     req.body.thumbnail = `/uploads/${req.file.filename}`; // gán thumbnail của file cho body còn tên file đã được xử lí ở upload(router)
-    // }
-    // ceate new product
 
     req.body.createdBy = {
         account_id: res.locals.user.id
@@ -228,9 +224,6 @@ module.exports.updatePostPatch = async (req, res) => {
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.position = parseInt(req.body.position);
 
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`; // gán thumbnail của file cho body còn tên file đã được xử lí ở upload(router)
-    }
     // save into database
     try {
 
