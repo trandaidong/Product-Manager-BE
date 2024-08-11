@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-const geneerate=require("../helper/generate.js");
+const geneerate = require("../helper/generate.js");
 
 const userSchema = new mongoose.Schema({
     fullname: String,
@@ -11,6 +11,14 @@ const userSchema = new mongoose.Schema({
     },
     phone: String,
     avatar: String,
+    friendList: [
+        {
+            user_id: String,
+            room_chat_id: String
+        }
+    ],
+    acceptFriends: Array,
+    requestFriends: Array,
     status: {
         type: String,
         default: "active"
@@ -20,9 +28,9 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     deletedAt: Date
-},{ // object thứ 2 này chứa thời gian tạo mới sản phẩm => tạo ra 2 trường createAt, updateAt trong database
+}, { // object thứ 2 này chứa thời gian tạo mới sản phẩm => tạo ra 2 trường createAt, updateAt trong database
     timestamps: true
 })
-const User = mongoose.model("User", userSchema, 'users');// tham số thứ 3 giống nhưu là tên bảng trong database để nó có thể tìm tới
+const User = mongoose.model("User", userSchema, 'user');// tham số thứ 3 giống nhưu là tên bảng trong database để nó có thể tìm tới
 
 module.exports = User;

@@ -1,0 +1,49 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-success(3000)
+    +alert-error(3000)
+
+    .container.my-3 
+        include ../../partials/list-btn-users.pug
+
+        .row 
+            .col-12 
+                +box-head(pageTitle)
+        
+
+        .row
+            each user in users
+                .col-3   
+                    div(class="box-users")
+                        div(class="inner-avatar")
+                            img(
+                                src=(user.avatar? user.avatar: "/images/avatar.jpg")
+                                alt=user.fullname
+                            )
+                        div(class="inner-info")
+                            div(class="inner-name") #{user.fullname}
+                            div(class="inner-buttons")
+                                button(
+                                    class="btn btn-sm btn-primary mr-1"
+                                    btn-accept-friend=user.id
+                                ) Chấp nhận
+                                butotn(
+                                    class="btn btn-sm btn-secondary mr-1"
+                                    btn-refuse-friend=user.id
+                                ) Xóa
+                                butotn(
+                                    class="btn btn-sm btn-secondary mr-1"
+                                    btn-deleted-friend
+                                    disabled
+                                ) Đã xóa
+                                butotn(
+                                    class="btn btn-sm btn-primary mr-1"
+                                    btn-accepted-friend
+                                    disabled
+                                ) Đã chấp nhận
+
+block script 
+    script(type="module",src="/js/users.js")
