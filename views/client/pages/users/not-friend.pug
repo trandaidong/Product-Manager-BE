@@ -14,9 +14,9 @@ block main
                 +box-head(pageTitle)
         
 
-        .row
+        .row(data-users-not-friend=user.id)
             each user in users
-                .col-3   
+                .col-3(user-id=user.id)   
                     div(class="box-users")
                         div(class="inner-avatar")
                             img(

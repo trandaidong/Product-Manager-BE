@@ -39,12 +39,24 @@ module.exports.loginPost = async (req, res) => {
     }
     res.cookie("tokenUser", user.tokenUser);
 
+    _io.once('connection', (socket) => {
+        console.log("da ket noi")
+        socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id);
+    });
+
     // Lưu user_id
     await Cart.updateOne({
         _id: req.cookies.cartId
-    },{
+    }, {
         user_id: user.id
-    })
+    });
+
+    await User.updateOne({
+        _id: user.id
+    }, {
+        statusOnline: "Online"
+    });
+
     res.redirect("/");
 }
 
@@ -76,6 +88,16 @@ module.exports.registerPost = async (req, res) => {
 // [GET] /user/login
 module.exports.logout = async (req, res) => {
     res.clearCookie('tokenUser');
+
+    await User.updateOne({
+        _id: res.locals.user.id
+    }, {
+        statusOnline: "Offline"
+    });
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_OFFLINE", res.locals.user.id);
+    });
+
     res.redirect("/user/login");
 }
 // [GET] /user/password/forgot
