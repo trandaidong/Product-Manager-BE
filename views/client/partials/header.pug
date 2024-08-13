@@ -47,8 +47,12 @@ header.header
                                 a(href="/user/info") #{user.fullname}
                             li
                                 a(href="/cart") Giỏ hàng (#{miniCart ? miniCart.totalQuantity: "0" })
+                            //- li 
+                            //-     a(href="/chat") Chat
                             li 
-                                a(href="/chat") Chat
+                                a(href="/users/friends") Bạn bè
+                            li 
+                                a(href="/rooms-chat") Phòng chat
                             li  
                                 a(href="/user/logout") Đăng xuất
                         else

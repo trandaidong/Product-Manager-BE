@@ -34,9 +34,9 @@ module.exports.notFriend = async (req, res) => {
 }
 
 module.exports.request = async (req, res) => {
-     // socket
-     userSocket(res);
-     // end socket 
+    // socket
+    userSocket(res);
+    // end socket 
 
     const userId = res.locals.user.id;
 
@@ -61,52 +61,57 @@ module.exports.accept = async (req, res) => {
     // socket
     userSocket(res);
     // end socket 
-    
-   const userId = res.locals.user.id;
 
-   const myUser = await User.findOne({
-       _id: userId,
-       status: "active",
-       deleted: false,
-   });
-   const acceptFriends = myUser.acceptFriends;
+    const userId = res.locals.user.id;
 
-   const users = await User.find({
-       _id: { $in: acceptFriends },
-       status: "active",
-       deleted: false,
-   }).select("id avatar fullname");
-   res.render("client/pages/users/accept.pug", {
-       pageTitle: "Lời mời đã nhận",
-       users: users
-   })
+    const myUser = await User.findOne({
+        _id: userId,
+        status: "active",
+        deleted: false,
+    });
+    const acceptFriends = myUser.acceptFriends;
+
+    const users = await User.find({
+        _id: { $in: acceptFriends },
+        status: "active",
+        deleted: false,
+    }).select("id avatar fullname");
+    res.render("client/pages/users/accept.pug", {
+        pageTitle: "Lời mời đã nhận",
+        users: users
+    })
 }
 module.exports.friends = async (req, res) => {
     // socket
     userSocket(res);
     // end socket 
-    
-   const userId = res.locals.user.id;
 
-   const myUser = await User.findOne({
-       _id: userId,
-       status: "active",
-       deleted: false,
-   });
-   const friendList = myUser.friendList;
-   const friendListId=friendList.map(item=>{
-    return item.user_id;
-   });
-   console.log(friendListId);
+    const userId = res.locals.user.id;
 
-   const users = await User.find({
-       _id: { $in: friendListId },
-       status: "active",
-       deleted: false,
-   }).select("id avatar fullname statusOnline");
+    const myUser = await User.findOne({
+        _id: userId,
+        status: "active",
+        deleted: false,
+    });
+    const friendList = myUser.friendList;
+    const friendListId = friendList.map(item => {
+        return item.user_id;
+    });
 
-   res.render("client/pages/users/friends.pug", {
-       pageTitle: "Danh sách bạn bè",
-       users: users
-   })
+    const users = await User.find({
+        _id: { $in: friendListId },
+        status: "active",
+        deleted: false,
+    }).select("id avatar fullname statusOnline");
+
+    // lấy room-chat-id
+    users.forEach(user => {
+        const info = friendList.find(item => item.user_id == user.id);
+        user.room_chat_id = info.room_chat_id;
+    })
+
+    res.render("client/pages/users/friends.pug", {
+        pageTitle: "Danh sách bạn bè",
+        users: users
+    })
 }

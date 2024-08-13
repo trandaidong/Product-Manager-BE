@@ -7,33 +7,33 @@ block main
     +alert-error(3000)
 
     .container.my-3 
-        include ../../partials/list-btn-users.pug
-
         .row 
             .col-12 
                 +box-head(pageTitle)
+        .row.mb-3
+            .col-12 
+                a(
+                    href="/rooms-chat/create"
+                    class="btn btn-sm btn-success mr-1"
+                ) Tạo phòng chat
         
 
-        .row(data-user-friend)
-            each user in users
-                .col-3(user-id=user.id)
+        .row
+            each room in listRoomChat
+                .col-3
                     div(class="box-users")
                         div(class="inner-avatar")
                             img(
-                                src=(user.avatar? user.avatar: "/images/avatar.jpg")
-                                alt=user.fullname
+                                src="/images/avatar.jpg"
+                                alt= room.title
                             )
                         div(class="inner-info")
-                            div(class="inner-name") #{user.fullname}
+                            div(class="inner-name") #{room.title}
                             div(class="inner-buttons")
                                 a(
-                                    href=`/chat/${user.room_chat_id}`
+                                    href=`/chat/${room.id}`
                                     class="btn btn-sm btn-primary mr-1"
                                 ) Nhắn tin
-                        div(
-                            class="inner-status"
-                            status=user.statusOnline
-                        ) <i class="fa-solid fa-circle"></i>
 
 block script 
     script(type="module",src="/js/users.js")
